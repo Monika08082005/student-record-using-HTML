@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Record Management System</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, button { padding: 6px; margin: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+  <h2>Student Record Management System</h2>
+
+  <form id="studentForm">
+    <label>Name: <input type="text" id="name" required></label><br>
+    <label>Roll Number: <input type="text" id="roll" required></label><br>
+    <label>Marks: <input type="number" id="marks" required></label><br>
+    <button type="submit">Add Student</button>
+  </form>
+
+  <h3>Student List</h3>
+  <table id="studentTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Roll Number</th>
+        <th>Marks</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Students will be listed here -->
+    </tbody>
+  </table>
+
+  <script>
+    const students = [];
+
+    document.getElementById('studentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const roll = document.getElementById('roll').value;
+      const marks = document.getElementById('marks').value;
+
+      const exists = students.find(s => s.roll === roll);
+      if (exists) {
+        alert('Roll number already exists.');
+        return;
+      }
+
+      students.push({ name, roll, marks });
+      updateTable();
+      this.reset();
+    });
+
+    function updateTable() {
+      const tbody = document.getElementById('studentTable').querySelector('tbody');
+      tbody.innerHTML = '';
+      students.forEach((s, index) => {
+        const row = `<tr>
+          <td>${s.name}</td>
+          <td>${s.roll}</td>
+          <td>${s.marks}</td>
+          <td>
+            <button onclick="deleteStudent(${index})">Delete</button>
+          </td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function deleteStudent(index) {
+      students.splice(index, 1);
+      updateTable();
+    }
+  </script>
+</body>
+</html>
